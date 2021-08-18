@@ -4,29 +4,37 @@ pipeline{
 
     stages {
 
-        stage('Clean and Compile') { 
-            steps {
+        stage ('Compile Stage') {
 
-                bat "mvn clean compile"
-            }
-        }
-       
-		stage('Junit5 Test') { 
             steps {
+               
+                    bat 'mvn compile'                
 
-                bat "mvn verify"
             }
         }
         
-        stage('Build') { 
+    	stage ('Test Stage') {
+
             steps {
+                
+                    bat 'mvn test'
+                
 
-                bat "mvn install"
             }
-        }
-
+        }      
         
-         stage('Generate HTML report') {
+		
+		stage ('Build Stage') {
+
+            steps {
+                
+                    bat 'mvn install'
+                
+
+            }
+        }   
+        
+        stage('Generate Cucumber report') {
             steps{
         			cucumber buildStatus: 'UNSTABLE',
                 		reportTitle: 'My Cucumber Report',
@@ -35,14 +43,14 @@ pipeline{
                 		classifications: [
                     		[
                         		'key': 'Browser',
-                        		'value': 'Firefox'
+                        		'value': 'Chrome'
                     		]
                 		]
                   }
 			}
-           
-
-        }
+        
+        
 
     }
 
+}
